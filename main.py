@@ -1,12 +1,13 @@
 import random
+from operator import add
 from typing import List, TypedDict, Optional, Annotated, Dict, Literal
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph, START, END
 from common import *
 from dotenv import load_dotenv
 
-print("*" * 100)
-start_time = time.time()  # 取得開始時間
+print("=" * 100)
+start_time = time.time()   # 獲取開始的時間
 load_dotenv()
 
 class GraphState(TypedDict):
@@ -14,6 +15,7 @@ class GraphState(TypedDict):
     Represents the state of our graph.
     """
     state: str
+    history: Annotated[List[str], add]
 
 action1_name = "(action1)"
 action2_name = "(action2)"
@@ -21,15 +23,15 @@ action3_name = "(action3)"
 
 def action1(state):
     print(">", action1_name, state)
-    return {"state": f"{action1_name} ok"}
+    return {"state": f"{action1_name} ok", "history": [action1_name]}
 
 def action2(state):
     print(">", action2_name, state)
-    return {"state": f"{action2_name} ok"}
+    return {"state": f"{action2_name} ok", "history": [action2_name]}
 
 def action3(state):
     print(">", action3_name, state)
-    return {"state": f"{action3_name} ok"}
+    return {"state": f"{action3_name} ok", "history": [action3_name]}
 
 def condition_function(state) -> Literal["0", "1"]:
     return str(random.choice([0, 1]))
