@@ -1,14 +1,22 @@
 import os, pprint, json, time
+from typing import TypedDict
+from langgraph.graph import StateGraph
 from common import *
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
 
 print("=" * 100)
-
 start_time = time.time()  # 取得開始時間
-
 load_dotenv()
 
-printENV()
+class GraphState(TypedDict):
+    """
+    Represents the state of our graph.
+    """
+    state: str
+
+graph = StateGraph(GraphState)
+app = graph.compile()
+result = app.invoke({"state": "helo langsmith!"})
+print("result", result)
 
 print(evalEndTime(start_time))
