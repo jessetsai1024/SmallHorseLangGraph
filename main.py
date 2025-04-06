@@ -18,6 +18,7 @@ class GraphState(TypedDict):
 
 action1_name = "(action1)"
 action2_name = "(action2)"
+action2b_name = "(action2b)"
 action3_name = "(action3)"
 action4_name = "(action4)"
 
@@ -28,6 +29,10 @@ def action1(state):
 def action2(state):
     print(">", action2_name, state)
     return {"state": [f"{action2_name} ok"]}
+
+def action2b(state):
+    print(">", action2b_name, state)
+    return {"state": [f"{action2b_name} ok"]}
 
 def action3(state):
     print(">", action3_name, state)
@@ -41,13 +46,15 @@ graph = StateGraph(GraphState)
 
 graph.add_node(action1_name, action1)
 graph.add_node(action2_name, action2)
+graph.add_node(action2b_name, action2b)
 graph.add_node(action3_name, action3)
 graph.add_node(action4_name, action4)
 
 graph.add_edge(START, action1_name)
 graph.add_edge(action1_name, action2_name)
 graph.add_edge(action1_name, action3_name)
-graph.add_edge([action2_name, action3_name], action4_name)
+graph.add_edge(action2_name, action2b_name)
+graph.add_edge([action2b_name, action3_name], action4_name)
 graph.add_edge(action4_name, END)
 
 app = graph.compile()
